@@ -1,0 +1,12 @@
+dist/
+build/
+deploy_versions/
+.temp/
+.rn_temp/
+node_modules/
+.idea
+*pycache*
+.DS_Store/
+.swc
+*~
+t.py
