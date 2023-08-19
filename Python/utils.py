@@ -3,11 +3,11 @@ import numpy as np
 import torch
 from torchvision import transforms as T
 
-def draw_on_src(img_src, boxes, class_ids):
+def draw_on_src(img_src, boxes, labels, scores=None):
     # 左上角x 左上角y 框宽 框高 confidence
-    for i in range(len(class_ids)):
-        box = boxes[i]
-        # 根据输入来进行调整
+    for box, label in zip(boxes, labels):
+        print(box)
+        # 根据输入来进行调整绘制参数
         # cv.rectangle(img_src, (box[0], box[1]), (box[0] + box[2], box[1] + box[3]), (0, 0, 255), 2)
         cv.rectangle(img_src, (box[0], box[1]), (box[2], box[3]), (0, 0, 255), 2)
 
@@ -23,7 +23,7 @@ def format_img(np_img):
     _, _H, _W = im.shape
     # BGR2RGB
     im = im[[2, 1, 0], ...]
-    # 1.最大等比例缩放某一个边到640 2.填充到640x640
+    # 1.最大等比例缩放某一个边到640  2.填充到640x640
     # 1.计算缩放比例
     factor = max(_W / 640, _H / 640)  # default 640
     target_W, target_H = to_even(int(_W / factor)), to_even(int(_H / factor))
