@@ -116,20 +116,24 @@ class LoadPoseEngine:
 
 def main():
     infer = LoadPoseEngine('yolov8s-pose.engine')  # 加载模型
-    cap = cv.VideoCapture(0)
-    while 1:
-        f, np_img = cap.read()
-        if not f: break
-        s = time.time()
-        bboxes, scores, points = infer(np_img)
-        e = time.time() + 1e-5  # 防止计算的fps分子为0
-        scores = scores.cpu().numpy()
-        bboxes = bboxes.to(torch.int32).cpu().numpy()
-        points = points.cpu().numpy()  # A x 51条数据 17个点 每个点3个信息 分别是该点的x坐标，y坐标，置信度
-        infer.draw_pose(np_img, bboxes, scores, points)
-        print(f"fps: {format(1 / (e - s))}")
-        cv.imshow("1", np_img)
-        cv.waitKey(1)
+    cap = cv.VideoCapture(0)  # 开启自己的摄像头
+    try:
+        while 1:
+            f, np_img = cap.read()
+            if not f: break
+            s = time.time()
+            bboxes, scores, points = infer(np_img)
+            e = time.time() + 1e-5  # 防止计算的fps分子为0
+            scores = scores.cpu().numpy()
+            bboxes = bboxes.to(torch.int32).cpu().numpy()
+            points = points.cpu().numpy()  # A x 51条数据 17个点 每个点3个信息 分别是该点的x坐标，y坐标，置信度
+            infer.draw_pose(np_img, bboxes, scores, points)
+            print(f"fps: {format(1 / (e - s))}")
+            cv.imshow("1", np_img)
+            cv.waitKey(1)
+    except Exception as E:
+        if cap.isOpened():
+            cap.release()
 
 if __name__ == '__main__':
     main()
