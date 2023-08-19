@@ -5,3 +5,4 @@
 ## Python
 1. Yolov8-Detect
 2. Yolov8-Pose
+3. Yolov8-Detect-NMS
